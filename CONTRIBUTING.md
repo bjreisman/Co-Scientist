@@ -42,9 +42,8 @@ Generated `packages/*/schema/*.json` files are export artifacts and are intentio
 
 ## Pull Request Guidelines
 
-- Keep code, comments, README content, tests, and skill-facing technical documentation in English.
+- Keep code, comments, canonical technical documentation, tests, and skill-facing technical documentation in English. Translations such as `README.zh-CN.md` are allowed, but the English README remains the source of truth.
 - Do not commit local run artifacts, `.venv`, dashboard caches, `.claude/`, `.agents/`, `.co-scientist/`, `CLAUDE.md`, or `AGENTS.md`.
 - Do not commit API keys, provider credentials, private research notes, or unpublished manuscript content.
 - Include focused tests for behavior changes and bug fixes.
 - Keep host-agent calls out of automated tests unless the test uses deterministic local fakes.
-

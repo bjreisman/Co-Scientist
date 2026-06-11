@@ -1,5 +1,7 @@
 # Co-Scientist
 
+[简体中文](README.zh-CN.md)
+
 Co-Scientist is a repository-local research agent workflow for generating, reviewing, ranking, evolving, and summarizing scientific hypotheses. It is designed for host-agent runtimes such as Claude Code and Codex, while keeping the important state in ordinary files under `runs/<run_id>/`.
 
 The project uses Markdown skills for agent behavior and Python contracts for state, validation, search, embedding, ranking, and dashboard support. The intended user experience is simple: install the environment, install the project-local skills, start a run from a research goal, and inspect the generated artifacts and dashboard receipts.
@@ -526,7 +528,7 @@ Regenerate dashboard contract artifacts after editing dashboard-facing contracts
 uv run python -m packages.dashboard_contracts.export_contract_artifacts
 ```
 
-Keep code, comments, README content, tests, and skill-facing technical documentation in English.
+Keep code, comments, canonical technical documentation, tests, and skill-facing technical documentation in English. Translations such as `README.zh-CN.md` are allowed, but the English README remains the source of truth.
 
 ## Contributing and Security
 
