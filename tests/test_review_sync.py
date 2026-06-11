@@ -45,7 +45,10 @@ def test_sync_hypothesis_review_updates_embedded_payload_from_stage_artifacts() 
 
         result = sync_hypothesis_review(run_dir, "hyp-001", top_k_limit=4)
 
-        assert result["hypothesisPath"].endswith("hypotheses\\hyp-001\\HYPOTHESIS.json")
+        assert (
+            Path(result["hypothesisPath"]).resolve()
+            == (run_dir / "hypotheses" / "hyp-001" / "HYPOTHESIS.json").resolve()
+        )
         assert set(result["syncedSections"]) == {
             "initial_review",
             "full_review",
