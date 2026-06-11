@@ -534,6 +534,8 @@ Keep code, comments, canonical technical documentation, tests, and skill-facing 
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup, verification commands, and pull request expectations.
 
+Community expectations are documented in [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
+
 Please report suspected vulnerabilities privately. See [SECURITY.md](SECURITY.md) for the supported reporting path and credential-handling guidance.
 
 ## Citation

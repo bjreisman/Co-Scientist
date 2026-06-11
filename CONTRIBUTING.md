@@ -42,6 +42,7 @@ Generated `packages/*/schema/*.json` files are export artifacts and are intentio
 
 ## Pull Request Guidelines
 
+- Follow [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) in project discussions, issues, and pull requests.
 - Keep code, comments, canonical technical documentation, tests, and skill-facing technical documentation in English. Translations such as `README.zh-CN.md` are allowed, but the English README remains the source of truth.
 - Do not commit local run artifacts, `.venv`, dashboard caches, `.claude/`, `.agents/`, `.co-scientist/`, `CLAUDE.md`, or `AGENTS.md`.
 - Do not commit API keys, provider credentials, private research notes, or unpublished manuscript content.

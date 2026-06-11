@@ -209,8 +209,6 @@ __marimo__/
 # Co-Scientist user run directories
 runs/
 
-# Private planning and internal Chinese documents
-
 # Local Claude/Codex host install surfaces
 CLAUDE.md
 AGENTS.md

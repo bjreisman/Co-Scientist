@@ -536,6 +536,8 @@ uv run python -m packages.dashboard_contracts.export_contract_artifacts
 
 开发设置、验证命令和 pull request 预期见 [CONTRIBUTING.md](CONTRIBUTING.md)。
 
+社区行为预期见 [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)。
+
 请私下报告疑似安全漏洞。支持的报告路径和 credential-handling guidance 见 [SECURITY.md](SECURITY.md)。
 
 ## 引用
