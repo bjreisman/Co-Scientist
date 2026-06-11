@@ -1,0 +1,101 @@
+[project]
+name = "co-scientist"
+version = "0.1.0"
+description = "AI Co-Scientist"
+readme = "README.md"
+requires-python = ">=3.12"
+license = {text = "Apache-2.0"}
+dependencies = [
+    "pyyaml>=6.0",
+    "pydantic>=2.0",
+    "numpy>=1.26",
+    "defusedxml>=0.7",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "ruff>=0.6",
+    "pyright>=1.1",
+]
+mcp = [
+    "mcp>=1.0",
+]
+gemini = [
+    "google-genai>=1.0",
+]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["packages*", "tools*"]
+exclude = ["tests*", "apps*", "skills*", "examples*", "runs*", "templates*"]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 119
+indent-width = 4
+
+[tool.ruff.lint]
+extend-select = [
+    "B",      # bugbear
+    "C",      # complexity
+    "E",      # error
+    "F",      # pyflakes
+    "I",      # isort
+    "PERF",   # performance
+    "RET",    # return
+    "S",      # bandit (security)
+    "SIM",    # simplify
+    "W",      # warning
+    "UP",     # pyupgrade
+    "D",      # pydocstyle
+    "PT009",  # pytest assert
+    "RUF022", # sort __all__
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = [
+    "D101", # Test helper classes do not need public class docstrings.
+    "D102", # Test helper methods do not need public method docstrings.
+    "D100", # Test modules do not need public module docstrings.
+    "D107", # Test helper constructors do not need public init docstrings.
+    "D103", # Test functions are named for behavior instead of docstring-documented API.
+    "E402", # Test conftest adjusts sys.path before importing project packages.
+    "S101", # Pytest assertions are intentional.
+    "S603", # Subprocess tests use fixed interpreter commands and repository-local scripts.
+]
+"mcp-servers/search-bridge/server.py" = [
+    "E402", # The standalone script adds the repository root to sys.path before local imports.
+]
+"packages/agent_support/resolved_config.py" = ["C901"]
+"packages/agent_support/strategy_router.py" = ["C901"]
+"packages/run_artifacts/artifact_io.py" = ["C901"]
+"tools/install/claude_install.py" = ["C901"]
+"tools/install/codex_install.py" = ["C901"]
+"tools/validation/contract_validation.py" = ["C901"]
+"tools/validation/verify_pipeline_completion.py" = ["C901"]
+
+[tool.ruff.lint.isort]
+lines-after-imports = 2
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+docstring-code-format = true
+skip-magic-trailing-comma = false
+line-ending = "lf"
+
+[tool.pyright]
+pythonVersion = "3.12"
+typeCheckingMode = "standard"
+include = ["packages", "tools", "tests"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

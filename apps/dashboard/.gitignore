@@ -1,0 +1,30 @@
+# Nuxt dev/build outputs
+.output
+.nuxt
+.data
+.nitro
+.cache
+dist
+
+# Node dependencies
+node_modules
+
+# Keep Nuxt server routes under version control even though the repo root ignores `runs/`
+!server/
+!server/api/
+!server/api/runs/
+!server/api/runs/**
+
+# Logs
+logs
+*.log
+
+# Misc
+.DS_Store
+.fleet
+.idea
+
+# Local env files
+.env
+.env.*
+!.env.example

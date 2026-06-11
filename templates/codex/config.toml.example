@@ -1,0 +1,25 @@
+# Copy this block into your user-level Codex config, usually:
+#
+#   ~/.codex/config.toml
+#
+# You can also add it with the Codex CLI MCP configuration command if your
+# Codex version supports that workflow. Co-Scientist does not create a project
+# `.codex/` directory by default.
+
+[mcp_servers.co_scientist_search_bridge]
+command = "uv"
+args = ["run", "python", "mcp-servers/search-bridge/server.py"]
+cwd = "."
+startup_timeout_sec = 10
+tool_timeout_sec = 60
+enabled = true
+
+# Optional environment variables used by the literature providers. They are
+# read from your shell environment; do not paste secrets into this template.
+env_vars = [
+  "OPENALEX_EMAIL",
+  "OPENALEX_API_KEY",
+  "SEMANTIC_SCHOLAR_API_KEY",
+  "CO_SCIENTIST_LITERATURE_MAX_RESULTS",
+  "CO_SCIENTIST_LITERATURE_TIMEOUT_SECONDS",
+]
