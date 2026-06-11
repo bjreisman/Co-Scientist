@@ -99,7 +99,7 @@ def collect_environment_doctor_payload(project_root: Path, *, repo_root: Path | 
             if not missing_modules
             else (
                 "Install project dependencies in your current environment, for example "
-                "`uv sync --extra dev --extra mcp` or `pip install -e .[dev]`."
+                '`uv sync --extra dev --extra mcp` or `python -m pip install -e ".[dev,mcp]"`.'
             ),
             details={"required": list(required_modules), "missing": missing_modules},
         )

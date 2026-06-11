@@ -926,8 +926,7 @@ def test_contract_validation_cli_fails_when_equivalent_continue_evolution_decisi
         payload = json.loads(result.stdout)
         assert payload["status"] == "invalid"
         assert any(
-            "equivalent open continue_evolution strategy decisions" in issue["message"]
-            for issue in payload["issues"]
+            "equivalent open continue_evolution strategy decisions" in issue["message"] for issue in payload["issues"]
         )
 
 
@@ -953,10 +952,7 @@ def test_contract_validation_cli_fails_when_same_pre_round_continue_evolution_de
         assert result.returncode == 1, result.stderr
         payload = json.loads(result.stdout)
         assert payload["status"] == "invalid"
-        assert any(
-            "same pre-round state" in issue["message"]
-            for issue in payload["issues"]
-        )
+        assert any("same pre-round state" in issue["message"] for issue in payload["issues"])
 
 
 def test_contract_validation_cli_ignores_consumed_decisions_for_open_pre_round_duplicates() -> None:
@@ -979,10 +975,7 @@ def test_contract_validation_cli_ignores_consumed_decisions_for_open_pre_round_d
         result = _run_contract_validation(run_dir)
         payload = json.loads(result.stdout)
 
-        assert not any(
-            "same pre-round state" in issue["message"]
-            for issue in payload["issues"]
-        )
+        assert not any("same pre-round state" in issue["message"] for issue in payload["issues"])
 
 
 def test_contract_validation_cli_fails_when_evolution_round_refs_opponent_owned_ranked_match() -> None:
@@ -1429,10 +1422,7 @@ def test_contract_validation_cli_fails_when_active_pipeline_phase_remains_not_st
         assert result.returncode == 1, result.stderr
         payload = json.loads(result.stdout)
         assert payload["status"] == "invalid"
-        assert any(
-            "PIPELINE_STATE.json `status` must be `running`" in issue["message"]
-            for issue in payload["issues"]
-        )
+        assert any("PIPELINE_STATE.json `status` must be `running`" in issue["message"] for issue in payload["issues"])
 
 
 def test_contract_validation_cli_fails_when_current_stage_phase_drifts_from_pipeline_state() -> None:

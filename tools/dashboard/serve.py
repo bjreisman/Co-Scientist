@@ -273,10 +273,8 @@ class DashboardSupervisor:
         preview_command = [
             pnpm_command,
             "preview",
-            "--host",
-            self.frontend_host,
-            "--port",
-            str(port),
+            f"--host={self.frontend_host}",
+            f"--port={port}",
         ]
         dev_command = [
             pnpm_command,

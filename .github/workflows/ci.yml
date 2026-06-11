@@ -1,0 +1,65 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+
+      - name: Install Python dependencies
+        run: uv sync --extra dev --extra mcp
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.33.0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "22"
+          cache: pnpm
+          cache-dependency-path: apps/dashboard/pnpm-lock.yaml
+
+      - name: Install dashboard dependencies
+        run: pnpm --dir apps/dashboard install --frozen-lockfile
+
+      - name: Lint Python
+        run: uv run python -m ruff check packages tools mcp-servers tests
+
+      - name: Check Python formatting
+        run: uv run python -m ruff format --check packages tools mcp-servers tests
+
+      - name: Test Python
+        run: uv run pytest -q
+
+      - name: Check Python package dependencies
+        run: uv pip check
+
+      - name: Build dashboard
+        run: pnpm --dir apps/dashboard build
+
+      - name: Verify Codex integration surface
+        run: uv run python -m tools.validation.verify_codex_integration_surface

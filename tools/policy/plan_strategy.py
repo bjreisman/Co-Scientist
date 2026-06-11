@@ -205,9 +205,7 @@ def _parse_island_item(item: object, index: int) -> IslandStateContract:
     non_canonical_keys = sorted(set(item).difference(_CANONICAL_ISLAND_ITEM_KEYS | _DEPRECATED_ISLAND_ITEM_KEYS))
     if non_canonical_keys:
         raise ValueError(
-            f"islands/ISLANDS.json items[{index}] contains non-canonical keys: "
-            + ", ".join(non_canonical_keys)
-            + "."
+            f"islands/ISLANDS.json items[{index}] contains non-canonical keys: " + ", ".join(non_canonical_keys) + "."
         )
     missing_keys = sorted(_CANONICAL_ISLAND_ITEM_KEYS.difference(item))
     if missing_keys:
@@ -470,9 +468,7 @@ def _continue_evolution_signature(plan: StrategyPlanContract) -> tuple[object, .
 def _continue_evolution_base_signature(plan: StrategyPlanContract) -> tuple[object, ...] | None:
     if plan.current_phase != PIPELINE_STAGE_EVOLUTION or plan.next_action != "continue_evolution":
         return None
-    base_signals = {
-        key: value for key, value in plan.signals.items() if key not in _EVOLUTION_SELECTION_SIGNAL_KEYS
-    }
+    base_signals = {key: value for key, value in plan.signals.items() if key not in _EVOLUTION_SELECTION_SIGNAL_KEYS}
     return (
         plan.current_phase,
         plan.next_action,

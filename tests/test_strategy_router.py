@@ -407,12 +407,12 @@ def test_plan_strategy_for_run_does_not_append_duplicate_open_continue_evolution
 
         first_plan = plan_strategy_for_run(config_path)
         decision_lines_after_first_plan = (
-            run_dir / "state" / "STRATEGY_DECISIONS.jsonl"
-        ).read_text(encoding="utf-8").splitlines()
+            (run_dir / "state" / "STRATEGY_DECISIONS.jsonl").read_text(encoding="utf-8").splitlines()
+        )
         second_plan = plan_strategy_for_run(config_path)
         decision_lines_after_second_plan = (
-            run_dir / "state" / "STRATEGY_DECISIONS.jsonl"
-        ).read_text(encoding="utf-8").splitlines()
+            (run_dir / "state" / "STRATEGY_DECISIONS.jsonl").read_text(encoding="utf-8").splitlines()
+        )
 
         assert first_plan.next_action == "continue_evolution"
         assert second_plan.next_action == "continue_evolution"
@@ -480,12 +480,12 @@ def test_plan_strategy_replays_open_continue_decision_before_resampling_unvisite
 
         first_plan = plan_strategy_for_run(config_path)
         decision_lines_after_first_plan = (
-            run_dir / "state" / "STRATEGY_DECISIONS.jsonl"
-        ).read_text(encoding="utf-8").splitlines()
+            (run_dir / "state" / "STRATEGY_DECISIONS.jsonl").read_text(encoding="utf-8").splitlines()
+        )
         second_plan = plan_strategy_for_run(config_path)
         decision_lines_after_second_plan = (
-            run_dir / "state" / "STRATEGY_DECISIONS.jsonl"
-        ).read_text(encoding="utf-8").splitlines()
+            (run_dir / "state" / "STRATEGY_DECISIONS.jsonl").read_text(encoding="utf-8").splitlines()
+        )
 
         assert first_plan.signals["selected_parent_ids"] == ["hyp-001"]
         assert second_plan.signals["selected_parent_ids"] == ["hyp-001"]

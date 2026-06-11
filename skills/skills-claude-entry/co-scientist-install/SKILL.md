@@ -16,9 +16,7 @@ Execution steps:
    `uv` quick install:
 
    ```powershell
-   uv venv
-   .venv\Scripts\activate
-   uv pip install -e .[dev]
+   uv sync --extra dev --extra mcp
    pnpm --dir apps/dashboard install
    pnpm --dir apps/dashboard build
    powershell -File tools/install/install_co_scientist.ps1
@@ -29,7 +27,7 @@ Execution steps:
    ```powershell
    conda create -n co-scientist python=3.12 -y
    conda activate co-scientist
-   pip install -e .[dev]
+   python -m pip install -e ".[dev,mcp]"
    pnpm --dir apps/dashboard install
    pnpm --dir apps/dashboard build
    powershell -File tools/install/install_co_scientist.ps1
@@ -54,7 +52,7 @@ Execution steps:
 4. After install or reconcile, recommend:
 
    ```bash
-   python -m tools.host.claude_project_cli doctor
+   uv run python -m tools.host.project_cli doctor
    ```
 
 5. Return a short summary of:

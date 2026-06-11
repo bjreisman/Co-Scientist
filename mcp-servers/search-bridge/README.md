@@ -14,16 +14,17 @@ The server is intentionally thin. It does not implement provider search, dedupli
 The project can run without this server. Install the optional MCP dependency only when an external MCP host needs to call the bridge:
 
 ```powershell
-conda activate cos
-pip install -e .[mcp]
+uv sync --extra mcp
 ```
+
+Conda users can instead activate the project environment and run `python -m pip install -e ".[mcp]"`.
 
 ## Run
 
 From the repository root:
 
 ```powershell
-python mcp-servers/search-bridge/server.py
+uv run python mcp-servers/search-bridge/server.py
 ```
 
 The server runs over stdio by default through FastMCP.

@@ -52,6 +52,7 @@ def test_dashboard_supervisor_starts_services_and_reuses_runtime() -> None:
         try:
             supervisor = DashboardSupervisor(
                 runs_dir,
+                repo_root=repo_root,
                 launcher=fake_launcher,
                 health_checker=lambda url: url in healthy_urls,
             )
@@ -85,6 +86,8 @@ def test_dashboard_supervisor_starts_services_and_reuses_runtime() -> None:
 def test_dashboard_supervisor_uses_fallback_ports(monkeypatch: pytest.MonkeyPatch) -> None:
     with TemporaryDirectory() as temp_dir:
         runs_dir = Path(temp_dir) / "runs"
+        repo_root = Path(temp_dir) / "repo"
+        (repo_root / "apps" / "dashboard").mkdir(parents=True)
         runs_dir.mkdir()
 
         healthy_urls: set[str] = set()
@@ -102,6 +105,7 @@ def test_dashboard_supervisor_uses_fallback_ports(monkeypatch: pytest.MonkeyPatc
 
         supervisor = DashboardSupervisor(
             runs_dir,
+            repo_root=repo_root,
             launcher=fake_launcher,
             health_checker=lambda url: url in healthy_urls,
         )
@@ -144,6 +148,44 @@ def test_dashboard_supervisor_can_return_starting_runtime_without_blocking(
         assert runtime["frontend"]["status"] == "starting"
         assert runtime["frontend"]["baseUrl"] == "http://127.0.0.1:3000"
         assert launched[0][1] == "dev"
+
+
+def test_dashboard_supervisor_uses_equals_flags_for_preview_command(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    with TemporaryDirectory() as temp_dir:
+        runs_dir = Path(temp_dir) / "runs"
+        repo_root = Path(temp_dir) / "repo"
+        frontend_dir = repo_root / "apps" / "dashboard"
+        runs_dir.mkdir()
+        (frontend_dir / ".output").mkdir(parents=True)
+
+        healthy_urls: set[str] = set()
+        launched: list[list[str]] = []
+
+        def fake_launcher(command: list[str], cwd: Path, env: dict[str, str]) -> FakeProcess:
+            launched.append(command)
+            assert "--host=127.0.0.1" in command
+            port_arg = next(arg for arg in command if arg.startswith("--port="))
+            port = int(port_arg.split("=", maxsplit=1)[1])
+            healthy_urls.add(f"http://127.0.0.1:{port}/api/health")
+            return FakeProcess(pid=6100)
+
+        monkeypatch.setattr(
+            "tools.dashboard.serve._find_available_port",
+            lambda host, preferred_port: 3000,
+        )
+
+        supervisor = DashboardSupervisor(
+            runs_dir,
+            repo_root=repo_root,
+            launcher=fake_launcher,
+            health_checker=lambda url: url in healthy_urls,
+        )
+        runtime = supervisor.ensure_started()
+
+        assert launched[0][1] == "preview"
+        assert runtime["frontend"]["command"][1] == "preview"
 
 
 def test_dashboard_supervisor_reuses_recent_starting_runtime(monkeypatch: pytest.MonkeyPatch) -> None:

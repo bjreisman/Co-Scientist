@@ -19,6 +19,8 @@ The project uses Markdown skills for agent behavior and Python contracts for sta
 - [Optional MCP Search Bridge](#optional-mcp-search-bridge)
 - [Repository Layout](#repository-layout)
 - [Development](#development)
+- [Contributing and Security](#contributing-and-security)
+- [Citation](#citation)
 - [Acknowledgements](#acknowledgements)
 - [License](#license)
 
@@ -525,6 +527,16 @@ uv run python -m packages.dashboard_contracts.export_contract_artifacts
 ```
 
 Keep code, comments, README content, tests, and skill-facing technical documentation in English.
+
+## Contributing and Security
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup, verification commands, and pull request expectations.
+
+Please report suspected vulnerabilities privately. See [SECURITY.md](SECURITY.md) for the supported reporting path and credential-handling guidance.
+
+## Citation
+
+If you use this repository in research, cite this project with [CITATION.cff](CITATION.cff) and cite the upstream AI co-scientist work listed below.
 
 ## Acknowledgements
 
