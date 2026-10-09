@@ -61,5 +61,8 @@ jobs:
       - name: Build dashboard
         run: pnpm --dir apps/dashboard build
 
+      - name: Test dashboard usage accounting
+        run: pnpm --dir apps/dashboard test:usage
+
       - name: Verify Codex integration surface
         run: uv run python -m tools.validation.verify_codex_integration_surface

@@ -12,6 +12,7 @@ import type {
   RunSummary
 } from '~/types/coScientist'
 import { buildRunPath, dashboardClientConfig } from '~/config/dashboard'
+import type { TokenUsage } from '~/types/tokenUsage'
 
 let pollTimer: ReturnType<typeof setInterval> | null = null
 let progressTimer: ReturnType<typeof setInterval> | null = null
@@ -73,6 +74,9 @@ export const useDashboardState = () => {
   const error = useState<string | null>('dashboard-error', () => null)
   const activeRunId = useState<string>('dashboard-active-run-id', () => '')
   const progress = useState<RunProgress>('dashboard-progress', emptyProgress)
+  const tokenUsage = useState<TokenUsage | null>('dashboard-token-usage', () => null)
+  const budgetSaving = useState<boolean>('dashboard-budget-saving', () => false)
+  const budgetError = useState<string | null>('dashboard-budget-error', () => null)
 
   const requestedRunId = computed(() => {
     const value = route.query.run
@@ -102,6 +106,7 @@ export const useDashboardState = () => {
     const runId = activeRunId.value
     if (!runId) {
       progress.value = emptyProgress()
+      tokenUsage.value = null
       return
     }
     try {
@@ -130,7 +135,32 @@ export const useDashboardState = () => {
         }
       }
     }
+    try {
+      const usage = await $fetch<TokenUsage>(`${apiBase.value}/api/runs/${encodeURIComponent(runId)}/usage`)
+      if (activeRunId.value === runId) tokenUsage.value = usage
+    } catch {
+      if (activeRunId.value === runId) tokenUsage.value = null
+    }
   }
+
+  const setCreditBudget = async (budgetCredits: number | null, fallbackSpeed: string = 'standard') => {
+    const runId = activeRunId.value
+    if (!runId || budgetSaving.value) return
+    budgetSaving.value = true
+    budgetError.value = null
+    try {
+      const usage = await $fetch<TokenUsage>(`${apiBase.value}/api/runs/${encodeURIComponent(runId)}/credit-budget`, {
+        method: 'POST', body: { budgetCredits, fallbackSpeed }
+      })
+      if (activeRunId.value === runId) tokenUsage.value = usage
+    } catch {
+      budgetError.value = 'Could not save the credit budget. Please try again.'
+    } finally {
+      budgetSaving.value = false
+    }
+  }
+
+  watch(activeRunId, () => { tokenUsage.value = null; budgetError.value = null })
 
   const refresh = async (force = false) => {
     if (inFlightLoad) {
@@ -152,6 +182,7 @@ export const useDashboardState = () => {
         if (!resolvedRunId) {
           snapshot.value = emptySnapshot()
           progress.value = emptyProgress()
+          tokenUsage.value = null
           error.value = null
           return
         }
@@ -223,6 +254,10 @@ export const useDashboardState = () => {
     runPath,
     state,
     metrics,
+    tokenUsage: readonly(tokenUsage),
+    budgetSaving: readonly(budgetSaving),
+    budgetError: readonly(budgetError),
+    setCreditBudget,
     ranking,
     graphSeed,
     insightSections,

@@ -419,6 +419,59 @@ Later stages write generation, review, ranking, evolution, proximity, literature
 
 ## Dashboard
 
+The dashboard header shows **estimated EDU credits** for the selected run. Use
+**Set budget** to save a credit budget (fractional values are supported). The
+meter warns at 80% and shows an exceeded state at 100%. It is advisory and does
+not interrupt Codex requests or expose the workspace's remaining credit balance.
+
+Credits use the [OpenAI Business/Enterprise/Edu Work and Codex rate card](https://help.openai.com/en/articles/11481834-chatgpt-rate-card-business-enterpriseedu-credit-based-pricing),
+snapshotted in `tools/credit_rates.json` on 2026-10-08. Each response is priced
+using its recorded model: uncached input × input rate + cached input × cached
+rate + output × output rate, divided by one million. Cache writes and guardian
+safety checks are free. Reasoning output is already included in output tokens.
+For example, GPT-6.1 Sol with 500,000 input tokens (400,000 cached) and 100,000
+output tokens costs an estimated 31 credits at Standard rates.
+
+Recorded speed takes precedence. When speed is absent, the budget editor lets
+you choose an explicit fallback: Standard (1×, default), Fast (2×), or Ultrafast
+(6×). These are credit multipliers, not subscription allowance multipliers.
+Unknown models or unsupported speed combinations remain unpriced; the meter
+shows partial coverage or unavailable usage instead of guessing. The model
+breakdown and underlying token counts remain visible for auditing. Update the
+rate-card snapshot when OpenAI changes pricing; this is an estimate, not an invoice.
+
+Codex `start`, `run`, and `resume` enroll the current thread automatically when
+the host provides its thread ID. Run the collector in a separate foreground
+terminal/tool session during a campaign for live updates:
+
+```bash
+uv run python -m tools.token_usage watch runs/<run_id>
+```
+
+For hosts that do not supply a thread ID, attach explicitly first:
+
+```bash
+uv run python -m tools.token_usage attach runs/<run_id> --thread-id <codex-thread-id> --budget 100 --speed standard
+```
+
+Tracking starts at attachment, persists across resumes, and sums distinct response
+IDs from enrolled Codex rollout files and discovered descendant sessions. It
+reads `sessions/` and `archived_sessions/` under `CODEX_HOME` (default `~/.codex`).
+Only usage numbers, model labels, and coverage metadata are exported; chat
+contents, credentials, and rollout paths are never copied into run artifacts.
+Older cumulative `token_count` records are supported as a fallback. These local
+formats are runtime-dependent. Missing sessions show partial coverage; reports
+more than 30 seconds old are marked stale. Earlier planning/chat usage is outside
+the measurement window, and separately launched chats must be enrolled explicitly.
+
+The dashboard reads artifacts and does not access the Codex session directory.
+`state/TOKEN_USAGE_CONFIG.json` keeps local enrollment, `state/TOKEN_USAGE.json`
+holds measured tokens and estimated credits, and `state/CREDIT_BUDGET.json` holds
+the optional credit budget and fallback speed. Use `collect` instead of `watch`
+for a one-time refresh. `attach --budget <positive-number> --speed <mode>` updates
+settings without resetting enrollment. Historical token budgets are not reused
+as credit budgets. Claude/API billing is not estimated by this Codex EDU collector.
+
 `start`, `run`, and `resume` try to bootstrap the dashboard runtime in the background. Resolve the ready links for a run with:
 
 ```powershell

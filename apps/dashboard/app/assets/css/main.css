@@ -252,6 +252,37 @@ a {
   justify-content: flex-end;
 }
 
+.token-meter {
+  padding: 14px 32px 18px;
+  border-top: 1px solid var(--topbar-border);
+  --meter-color: #3b82f6;
+}
+.token-meter.warning { --meter-color: #d97706; }
+.token-meter.exceeded { --meter-color: #dc2626; }
+.token-meter-heading, .token-meter-details, .token-budget-form {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+}
+.token-meter-heading { justify-content: space-between; font-size: 13px; }
+.token-meter-heading > div { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
+.token-meter-total { font-variant-numeric: tabular-nums; font-weight: 600; }
+.token-meter-muted, .token-meter-details { opacity: .75; }
+.token-meter-notice, .token-meter.exceeded .token-meter-total, .token-meter.warning .token-meter-total { color: var(--meter-color); }
+.token-meter-track { height: 8px; background: var(--topbar-border); border-radius: 5px; margin-top: 10px; overflow: hidden; }
+.token-meter-fill { height: 100%; background: var(--meter-color); border-radius: inherit; transition: width .3s; }
+.token-meter-details { font-size: 11px; margin-top: 8px; }
+.token-budget-button, .token-budget-form input, .token-budget-form select {
+  border: 1px solid var(--topbar-border); border-radius: 7px; background: transparent;
+  color: inherit; font: inherit; padding: 5px 9px;
+}
+.token-budget-button { cursor: pointer; }
+.token-budget-button:disabled { cursor: default; opacity: .5; }
+.token-budget-form { font-size: 12px; margin-top: 12px; }
+.token-budget-form input, .token-budget-form select { width: 245px; max-width: 100%; }
+@media (max-width: 600px) { .token-meter { padding: 12px 16px; } }
+
 .topbar-nav-link {
   display: inline-flex;
   align-items: center;

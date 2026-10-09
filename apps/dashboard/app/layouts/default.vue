@@ -2,7 +2,7 @@
 import { computed, onMounted, watch } from 'vue'
 
 const route = useRoute()
-const { metrics, runId } = useDashboardState()
+const { metrics, runId, tokenUsage, budgetSaving, budgetError, setCreditBudget } = useDashboardState()
 const theme = useState<'light' | 'dark'>('theme', () => 'light')
 
 const activeNav = computed(() => (route.meta.nav as string) ?? 'ranking')
@@ -42,7 +42,11 @@ watch(theme, (value) => {
           :current-run-id="runId"
           :theme="theme"
           :active-nav="activeNav"
+          :token-usage="tokenUsage"
+          :budget-saving="budgetSaving"
+          :budget-error="budgetError"
           @set-theme="setTheme"
+          @set-budget="setCreditBudget"
         />
         <div class="main-content">
           <slot />

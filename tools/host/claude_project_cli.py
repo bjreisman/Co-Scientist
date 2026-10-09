@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import sys
 from collections.abc import Sequence
@@ -11,6 +12,7 @@ from pathlib import Path
 from typing import Any
 
 from ..install.environment_doctor import collect_environment_doctor_payload, render_environment_doctor_text
+from ..token_usage import attach_run, collect_usage
 from ..validation.contract_validation import validate_run_artifacts
 from .create_run import (
     CreatedRunArtifacts,
@@ -310,6 +312,15 @@ def _run_bootstrap_command(
         resume=resume,
         ensure_dashboard=ensure_dashboard,
     )
+    token_usage = None
+    thread_id = os.environ.get("CODEX_THREAD_ID") or os.environ.get("CODEX_SESSION_ID")
+    if thread_id:
+        try:
+            attach_run(result.run_dir, thread_id)
+            token_usage = collect_usage(result.run_dir)
+        except (OSError, ValueError):
+            # Usage telemetry must not prevent scientific state bootstrap.
+            token_usage = {"status": "unavailable"}
     return {
         "mode": "host-agent",
         "runDir": str(result.run_dir),
@@ -320,6 +331,7 @@ def _run_bootstrap_command(
         "dashboard": result.dashboard_runtime,
         "dashboardLinks": result.dashboard_links,
         "validation": result.handoff.validation.model_dump(mode="json"),
+        "tokenUsage": token_usage,
     }
 
 

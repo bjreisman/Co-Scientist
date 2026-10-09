@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { MetricItem } from '~/types/coScientist'
+import type { TokenUsage } from '~/types/tokenUsage'
 import type { LocationQueryRaw, RouteLocationRaw } from 'vue-router'
 
 const route = useRoute()
@@ -10,6 +11,9 @@ const props = withDefaults(
     activeNav: string
     currentRunId?: string
     theme?: 'light' | 'dark'
+    tokenUsage: TokenUsage | null
+    budgetSaving: boolean
+    budgetError: string | null
   }>(),
   {
     theme: 'light'
@@ -18,6 +22,7 @@ const props = withDefaults(
 
 const emit = defineEmits<{
   (event: 'set-theme', value: 'light' | 'dark'): void
+  (event: 'set-budget', value: number | null, fallbackSpeed: string): void
 }>()
 
 const setTheme = (value: 'light' | 'dark') => {
@@ -101,5 +106,7 @@ const navItems = computed(() => [
         </div>
       </div>
     </div>
+    <CreditUsageMeter :usage="props.tokenUsage" :enabled="Boolean(props.currentRunId)"
+      :saving="props.budgetSaving" :error="props.budgetError" @set-budget="(budget, speed) => emit('set-budget', budget, speed)" />
   </header>
 </template>
