@@ -1868,6 +1868,43 @@ def test_contract_validation_cli_fails_when_evolved_hypotheses_have_no_evolution
         assert any("EVOLUTION_STATE.json is missing" in issue["message"] for issue in payload["issues"])
 
 
+def test_contract_validation_cli_allows_open_selection_before_first_evolution_child() -> None:
+    with TemporaryDirectory() as temp_dir:
+        run_dir = Path(temp_dir) / "run"
+        run_dir.mkdir()
+        _write_config(run_dir)
+        store = ArtifactStore(run_dir, top_k_limit=3)
+        store.bootstrap()
+        parent = build_hypothesis("hyp-001", 1200.0, "island-001")
+        state = CoScientistStateContract(
+            research_plan=ResearchPlanContract(status="completed", research_goal="Investigate response drift."),
+            hypotheses={parent.id: parent},
+            islands={"island-001": IslandStateContract(id="island-001")},
+        )
+        store.write_research_plan(state.research_plan)
+        store.write_hypothesis(parent)
+        store.write_islands(state)
+        store.write_pipeline_state(
+            state,
+            mode="host-agent",
+            status="running",
+            current_phase="Evolution",
+            current_skill="hypothesis-evolution-loop",
+        )
+        _append_continue_evolution_decision(
+            run_dir,
+            decision_index=1,
+            hypothesis_count=1,
+            viable_hypothesis_count=1,
+            entered_top_k_last_round=None,
+            top_hypothesis_ids=[parent.id],
+        )
+        result = _run_contract_validation(run_dir)
+        payload = json.loads(result.stdout)
+        assert not any("every island still has" in issue["message"] for issue in payload["issues"])
+        assert result.returncode == 0, payload
+
+
 def test_contract_validation_cli_fails_when_single_island_rounds_never_update_island_metrics() -> None:
     with TemporaryDirectory() as temp_dir:
         run_dir = Path(temp_dir) / "run"

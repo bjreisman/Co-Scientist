@@ -11,6 +11,7 @@ from packages.agent_support import PIPELINE_STAGE_GENERATION, build_policy_decis
 from packages.run_artifacts import ArtifactStore
 
 from ..dashboard import DashboardSupervisor
+from ..model_routing import freeze_policy, refresh_summary
 from ..policy.plan_strategy import plan_strategy_for_run
 from .host_agent import HostAgentHandoff, prepare_host_agent_handoff, write_host_agent_handoff
 from .host_config import HostSettings
@@ -56,6 +57,9 @@ def bootstrap_host_agent_run(
         if resume
         else _bootstrap_fresh_control_plane(artifact_store, settings)
     )
+    # Capture task model choices once; resume preserves the existing snapshot.
+    if freeze_policy(run_dir) is not None:
+        refresh_summary(run_dir)
 
     source_label = Path(settings.config_path).resolve() if settings.config_path else run_dir
     manifest_message = (

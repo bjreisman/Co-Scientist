@@ -6,13 +6,14 @@ Purpose:
 
 Applicability:
 
-- This route is allowed only for review, verification, and audit work.
+- This reviewer route covers review, verification, and audit work. Configured scientific generation, ranking and refinement delegation is separately governed by `codex-model-routing.md`.
 - It is not allowed for deterministic mechanics such as schema validation, literature search bridge execution, proximity embedding updates, Elo updates, island selection, dashboard projection, or artifact synchronization.
 
 Routing Rules:
 
 - If Codex subagents are available and the current task explicitly enters a review or verification stage, the host may ask a reviewer subagent to inspect the same canonical artifacts.
-- If subagents are unavailable, disabled, or too expensive for the run budget, the main thread must execute the same review contract locally.
+- When `state/MODEL_POLICY.json` exists, follow `codex-model-routing.md` to resolve, dispatch and audit the selected reviewer before execution. Its configured fallback governs unavailable agents.
+- Without a model policy, or when its fallback explicitly permits local work, the main thread may execute the same review contract locally if subagents are unavailable, disabled, or too expensive. Disclose the route and host settings.
 - The pipeline must remain valid when the reviewer route is `local_main_thread`.
 - Subagent output is advisory until the parent thread validates it and writes the canonical artifact.
 - A reviewer subagent must not fabricate literature evidence, embedding vectors, tournament results, validation summaries, or dashboard receipts.

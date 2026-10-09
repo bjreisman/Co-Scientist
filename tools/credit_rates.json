@@ -1,0 +1,77 @@
+{
+  "source": "https://help.openai.com/en/articles/11481834-chatgpt-rate-card-business-enterpriseedu-credit-based-pricing",
+  "checked_at": "2026-10-08",
+  "unit": "credits_per_million_tokens",
+  "rates": {
+    "gpt-6-astra": [
+      250,
+      25,
+      1250
+    ],
+    "gpt-6.1-sol": [
+      50,
+      2.5,
+      250
+    ],
+    "gpt-6-sol": [
+      50,
+      5,
+      250
+    ],
+    "gpt-6-luna": [
+      2.5,
+      0.25,
+      12.5
+    ],
+    "gpt-5.6-sol": [
+      100,
+      10,
+      500
+    ],
+    "gpt-5.6-terra": [
+      50,
+      5,
+      300
+    ],
+    "gpt-5.6-luna": [
+      5,
+      0.5,
+      30
+    ],
+    "gpt-rosalind-research": [
+      125,
+      12.5,
+      625
+    ],
+    "gpt-5.5": [
+      125,
+      12.5,
+      750
+    ],
+    "daybreak-blue": [
+      100,
+      10,
+      500
+    ],
+    "daybreak-red": [
+      312.5,
+      31.25,
+      1875
+    ],
+    "gpt-5.3-codex": [
+      43.75,
+      4.375,
+      350
+    ],
+    "gpt-5.2": [
+      43.75,
+      4.375,
+      350
+    ],
+    "gpt-6-astra-law": [
+      312.5,
+      31.25,
+      1562.5
+    ]
+  }
+}

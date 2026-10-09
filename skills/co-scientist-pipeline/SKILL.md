@@ -5,6 +5,10 @@ description: Run the full Co-Scientist pipeline for one research run.
 
 # co-scientist-pipeline
 
+Codex model policy:
+
+- Before scientific delegation, read `skills/shared-references/codex-model-routing.md` and resolve the assigned task role from `state/MODEL_POLICY.json`. Delegate only the bounded scientific task; retain parent ownership of native mechanics and canonical writeback. Record requested and observed model/effort separately. Without a configured policy, preserve the existing host route.
+
 Goal:
 
 - Run the full Co-Scientist pipeline for one research run.
@@ -98,6 +102,15 @@ Execution Contract:
 - When `human_checkpoint = every_major_stage`, pause only at major stage boundaries and not merely because one evolution child finished.
 
 Execution Steps:
+
+Codex usage telemetry:
+
+- The host CLI automatically enrolls the current Codex thread in `state/TOKEN_USAGE_CONFIG.json` when the runtime provides `CODEX_THREAD_ID` or `CODEX_SESSION_ID`. Enrollment starts at that point and is preserved on resume; earlier planning/chat tokens are outside this measurement window.
+- When the host supports a persistent foreground command, keep `python -m tools.token_usage watch <run_dir>` running in a separate tool/terminal session during the campaign. Do not wait for this watcher to exit before continuing research. Without a watcher, run `python -m tools.token_usage collect <run_dir>` before and after major stages.
+- The collector publishes usage-only `state/TOKEN_USAGE.json` and includes discovered descendant sessions. It does not copy chat text. The dashboard reads these artifacts, refreshes the top-of-page meter, and lets the user persist a warning budget in EDU credits in `state/CREDIT_BUDGET.json`.
+- Credits use per-response model rates from `tools/credit_rates.json`. Cache writes and guardian safety reviews are free. Recorded speed wins; otherwise use the explicit Standard/Fast/Ultrafast fallback in `CREDIT_BUDGET.json` (Standard by default). Unknown models or unsupported speeds remain unpriced. This estimates this run's usage, not the account credit balance or an invoice.
+- Treat unknown or partial usage as unknown or partial. Cached input is already included in input tokens, and reasoning output is already included in output tokens; do not count either twice.
+- The estimated-credit budget meter is advisory and does not cancel requests or enforce a hard spending cap. Honor any explicit user stopping instruction separately, and disclose the measurement boundary and missing coverage in the final overview.
 
 1. Open the required shared references, then open `skills/shared-references/schema-index.md` and the exact Python contracts for any top-level control-plane artifact this run will write or update.
 2. If the run is fresh, materialize the initial control-plane artifacts in canonical form:

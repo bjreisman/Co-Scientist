@@ -3682,7 +3682,11 @@ def validate_run_artifacts(
         _record_issue(issues, run_dir, strategy_decisions_path, message, "error")
         resume_ready = False
 
-    if single_island_round_count > 0 and island_items_payload:
+    # A routed selection may remain open at a budget checkpoint. Only completed
+    # round receipts require island reward/visit writeback.
+    if (
+        selected_single_island_counts or (evolved_hypothesis_count and single_island_round_count)
+    ) and island_items_payload:
         all_visit_counts_zero = all(int(item.get("visit_count", 0)) == 0 for item in island_items_payload)
         all_decayed_visits_zero = all(float(item.get("decayed_visits") or 0.0) == 0.0 for item in island_items_payload)
         if all_visit_counts_zero:

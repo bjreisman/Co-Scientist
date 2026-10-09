@@ -1,0 +1,39 @@
+# Install with: python -m tools.model_routing install --project /path/to/project
+# Edit this policy, then reinstall to regenerate matching Codex agent files.
+# New runs capture this policy; existing runs retain their snapshot.
+version: 1
+enabled: true
+max_concurrent_subagents: 2
+# Never silently use an expensive parent model if delegation is unavailable.
+fallback: stop
+roles:
+  evidence:
+    model: gpt-6-luna
+    reasoning_effort: medium
+  proposal:
+    model: gpt-6.1-sol
+    reasoning_effort: medium
+  reviewer:
+    model: gpt-6.1-sol
+    reasoning_effort: high
+  judge:
+    model: gpt-6.1-sol
+    reasoning_effort: high
+  refiner:
+    model: gpt-6.1-sol
+    reasoning_effort: high
+  synthesis:
+    model: gpt-6.1-sol
+    reasoning_effort: medium
+tasks:
+  configuration: synthesis
+  evidence: evidence
+  generation: proposal
+  review: reviewer
+  ranking: judge
+  evolution: refiner
+  meta_review: synthesis
+# Optional exact skill-to-role overrides, e.g.:
+# skill_overrides:
+#   hypothesis-initial-review: evidence
+skill_overrides: {}
