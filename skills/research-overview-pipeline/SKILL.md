@@ -5,6 +5,10 @@ description: Generate the final research overview from the top-ranked hypotheses
 
 # research-overview-pipeline
 
+Codex model policy:
+
+- Before scientific delegation, read `skills/shared-references/codex-model-routing.md` and resolve the assigned task role from `state/MODEL_POLICY.json`. Delegate only the bounded scientific task; retain parent ownership of native mechanics and canonical writeback. Record requested and observed model/effort separately. Without a configured policy, preserve the existing host route.
+
 Goal:
 
 - Generate the final research overview from the top-ranked hypotheses.

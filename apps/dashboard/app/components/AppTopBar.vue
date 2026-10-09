@@ -108,5 +108,6 @@ const navItems = computed(() => [
     </div>
     <CreditUsageMeter :usage="props.tokenUsage" :enabled="Boolean(props.currentRunId)"
       :saving="props.budgetSaving" :error="props.budgetError" @set-budget="(budget, speed) => emit('set-budget', budget, speed)" />
+    <TaskModelPolicy :run-id="props.currentRunId" />
   </header>
 </template>

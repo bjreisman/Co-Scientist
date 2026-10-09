@@ -121,6 +121,7 @@ def prepare_host_agent_handoff(
         resume=resume,
         skillPath=str(skill_path.resolve()),
         sharedReferences={
+            "modelRouting": str((repo_root / "skills/shared-references/codex-model-routing.md").resolve()),
             "artifactContract": str((repo_root / "skills" / "shared-references" / "artifact-contract.md").resolve()),
             "completionContract": str(
                 (repo_root / "skills" / "shared-references" / "completion-contract.md").resolve()
@@ -179,6 +180,9 @@ def prepare_host_agent_handoff(
             "strategyPlanContractPy": str((repo_root / "packages" / "agent_contracts" / "strategy_plan.py").resolve()),
         },
         artifactPaths={
+            "modelPolicy": str((run_dir / "state/MODEL_POLICY.json").resolve()),
+            "modelRouting": str((run_dir / "state/MODEL_ROUTING.json").resolve()),
+            "modelDispatches": str((run_dir / "state/model_dispatches").resolve()),
             "manifest": str((run_dir / "MANIFEST.md").resolve()),
             "startRequest": str((run_dir / "state" / "START_REQUEST.json").resolve()),
             "runPolicy": str((run_dir / "RUN_POLICY.yaml").resolve()),

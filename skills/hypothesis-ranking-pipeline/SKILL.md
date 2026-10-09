@@ -5,6 +5,10 @@ description: Update ranking artifacts for one reviewed hypothesis using canonica
 
 # hypothesis-ranking-pipeline
 
+Codex model policy:
+
+- Before scientific delegation, read `skills/shared-references/codex-model-routing.md` and resolve the assigned task role from `state/MODEL_POLICY.json`. Delegate only the bounded scientific task; retain parent ownership of native mechanics and canonical writeback. Record requested and observed model/effort separately. Without a configured policy, preserve the existing host route.
+
 Goal:
 
 - Update ranking artifacts for one reviewed hypothesis using canonical placement-opponent selection, ranked-frontier selection, tournament judgments, and Elo updates.

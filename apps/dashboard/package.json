@@ -5,6 +5,7 @@
   "packageManager": "pnpm@10.33.0",
   "scripts": {
     "test:usage": "node --experimental-strip-types --test tests/tokenUsage.test.ts",
+    "test:models": "node --experimental-strip-types --test tests/modelRouting.test.ts",
     "build": "nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",

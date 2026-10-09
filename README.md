@@ -583,6 +583,34 @@ uv run python -m packages.dashboard_contracts.export_contract_artifacts
 
 Keep code, comments, canonical technical documentation, tests, and skill-facing technical documentation in English. Translations such as `README.zh-CN.md` are allowed, but the English README remains the source of truth.
 
+## Codex task models
+
+Install editable task model choices and project-local custom agents:
+
+```bash
+python -m tools.host.project_cli models install --project /path/to/project
+```
+
+Edit `.co-scientist/model-policy.yaml`, then rerun installation to regenerate `.codex/agents/` role files.
+Defaults use GPT-6 Luna medium for evidence extraction, GPT-6.1 Sol medium for proposals and synthesis,
+and GPT-6.1 Sol high for reviews, tournament judgments and refinement. Existing `.codex/config.toml` is preserved;
+when absent, installation creates Sol medium main-agent and Luna medium subagent defaults.
+Reload project configuration or start a fresh chat to discover roles.
+
+New bootstrap handoffs capture `state/MODEL_POLICY.json`; resume preserves it. For example:
+
+```bash
+python -m tools.host.project_cli models resolve runs/my-run --skill hypothesis-full-review
+python -m tools.host.project_cli models show runs/my-run
+```
+
+The host follows [the task routing contract](skills/shared-references/codex-model-routing.md) to delegate bounded
+scientific tasks, validate advisory results and own canonical writes. Python does not make model calls or change the
+main chat's live model. Deterministic bridges, validation, Elo and island updates stay local. `fallback: stop`
+prevents an unavailable subagent from silently using the parent's model; `fallback: local` permits a disclosed fallback.
+The dashboard's **Task models** panel displays requested roles and actual model/effort metadata from dispatch receipts.
+Missing rollout metadata stays unverified. Existing runs without receipts have no inferred history.
+
 ## Contributing and Security
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup, verification commands, and pull request expectations.
